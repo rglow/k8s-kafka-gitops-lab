@@ -116,3 +116,20 @@ Expected result: Flux should reconcile the Git source and create the
 - prefer CLI bootstrap over Terraform for this local lab
 - keep `infra/gitops/` as the reconciliation root
 - manage platform components first, then Kafka operator, then workloads
+
+### First reconciliation target
+
+After bootstrap, add a repository-level `kustomization.yaml` under
+`infra/gitops/` and define the first Flux-managed target for `infra/platform/`.
+
+Minimal example:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - flux-system
+  - platform-kustomization.yaml
+```
+
+The corresponding Flux `Kustomization` should point to `./infra/platform`.

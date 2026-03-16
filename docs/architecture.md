@@ -50,3 +50,6 @@ Generated Flux sync artifacts stay there, while reconciled resources live under:
 
 - `infra/platform/` for shared infrastructure and operators
 - `infra/apps/` for workloads running on the platform
+
+The first reconciliation target beyond Flux itself is the `platform`
+`Kustomization`, which points at `infra/platform/`.
