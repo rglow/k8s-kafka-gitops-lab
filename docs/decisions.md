@@ -91,3 +91,68 @@ If needed, the same setup can be validated against:
 
 - kind (to increase upstream alignment)
 - a managed Kubernetes cluster (EKS / AKS) for production parity
+
+## D2: GitOps Tooling
+
+### Context
+
+The project needs a GitOps controller to manage platform components and,
+later, Kafka-related infrastructure from Git.
+
+The selected tool should:
+
+- work well for infrastructure-first workflows
+- support Helm-based operators and plain manifests
+- fit a local `k3d` development cluster
+- keep the operational model simple
+
+The near-term goal is to install a Kafka operator and manage it declaratively.
+
+### Options Considered
+
+#### 1) Flux
+
+**Pros:**
+- Kubernetes-native controller model
+- Strong fit for infrastructure reconciliation
+- Good support for `Kustomization`, `HelmRelease`, and dependency ordering
+- Lightweight operational footprint
+
+**Cons:**
+- Less UI support out of the box
+- Slightly steeper learning curve when debugging through CRDs only
+
+#### 2) Argo CD
+
+**Pros:**
+- Mature and user-friendly UI
+- Good visibility into application sync state
+- Strong ecosystem and broad adoption
+
+**Cons:**
+- Better aligned to application delivery workflows than infra-first use cases
+- Adds more platform surface area than needed for this lab
+
+### Decision
+
+**Selected: Flux**
+
+### Rationale
+
+Flux is a better fit for this lab because the repository is currently focused on:
+
+- infrastructure components
+- operator-based installations
+- Git as the primary control plane
+- simple local experimentation
+
+For the next phase, Flux provides a clean path to install and manage
+Kafka-related components such as Strimzi using declarative resources.
+
+### Future Consideration
+
+Argo CD remains a valid alternative if the project later expands toward:
+
+- richer application delivery workflows
+- multi-team self-service use cases
+- stronger UI-driven operations
