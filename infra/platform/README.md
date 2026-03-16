@@ -19,4 +19,5 @@ operator is healthy.
 
 The local development Kafka cluster lives under `infra/platform/kafka/` and is
 reconciled through a separate Flux `Kustomization` that depends on the platform
-layer.
+layer. In the current lab setup, the Kafka resources run in `platform-system`
+because the Strimzi operator watches its own namespace.

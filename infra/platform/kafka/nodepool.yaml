@@ -2,14 +2,14 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaNodePool
 metadata:
   name: broker
-  namespace: kafka
+  namespace: platform-system
   labels:
     strimzi.io/cluster: kafka-dev
 spec:
   replicas: 1
   roles:
-  - broker
-  - controller
+    - broker
+    - controller
   storage:
     type: ephemeral
   resources:

@@ -63,3 +63,7 @@ The current platform bootstrap sequence is:
 Kafka cluster resources are reconciled separately from the operator install so
 that Flux can wait for the Strimzi CRDs before applying `Kafka` and
 `KafkaNodePool` resources.
+
+For the current local lab, both the Strimzi operator and the Kafka cluster run
+in `platform-system`. This keeps the operator scope simple and avoids
+introducing cross-namespace watch configuration during bootstrap.
