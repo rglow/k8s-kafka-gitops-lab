@@ -133,3 +133,31 @@ resources:
 ```
 
 The corresponding Flux `Kustomization` should point to `./infra/platform`.
+
+---
+
+## 4. Install Strimzi Through Flux
+
+Strimzi should be installed as part of the `infra/platform/` layer, not by
+running `helm install` manually.
+
+Recommended resources:
+
+- `HelmRepository` pointing to `https://strimzi.io/charts/`
+- `HelmRelease` for the `strimzi-kafka-operator` chart
+
+Suggested order:
+
+1. commit the Strimzi manifests under `infra/platform/strimzi/`
+2. push to `main`
+3. wait for Flux to reconcile the `platform` `Kustomization`
+4. verify the operator before creating any `Kafka` custom resources
+
+Verification commands:
+
+```bash
+flux get helmrepositories -A
+flux get helmreleases -A
+kubectl get pods -n platform-system
+kubectl get crds | grep kafka.strimzi.io
+```

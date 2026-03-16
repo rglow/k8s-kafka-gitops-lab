@@ -53,3 +53,9 @@ Generated Flux sync artifacts stay there, while reconciled resources live under:
 
 The first reconciliation target beyond Flux itself is the `platform`
 `Kustomization`, which points at `infra/platform/`.
+
+The current platform bootstrap sequence is:
+
+1. create `platform-system`
+2. install the Strimzi operator through Flux
+3. add Kafka custom resources after the operator and CRDs are ready
