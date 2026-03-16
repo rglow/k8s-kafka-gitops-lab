@@ -59,3 +59,7 @@ The current platform bootstrap sequence is:
 1. create `platform-system`
 2. install the Strimzi operator through Flux
 3. add Kafka custom resources after the operator and CRDs are ready
+
+Kafka cluster resources are reconciled separately from the operator install so
+that Flux can wait for the Strimzi CRDs before applying `Kafka` and
+`KafkaNodePool` resources.

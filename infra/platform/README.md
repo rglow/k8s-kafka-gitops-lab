@@ -16,3 +16,7 @@ the root `kustomization.yaml` for this layer.
 Strimzi is installed here through Flux using a `HelmRepository` and
 `HelmRelease`. The Kafka cluster custom resources should be added only after the
 operator is healthy.
+
+The local development Kafka cluster lives under `infra/platform/kafka/` and is
+reconciled through a separate Flux `Kustomization` that depends on the platform
+layer.

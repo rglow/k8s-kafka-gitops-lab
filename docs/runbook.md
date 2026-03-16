@@ -161,3 +161,31 @@ flux get helmreleases -A
 kubectl get pods -n platform-system
 kubectl get crds | grep kafka.strimzi.io
 ```
+
+---
+
+## 5. Deploy a Minimal Kafka Cluster
+
+Deploy the Kafka cluster only after the Strimzi operator is healthy and the CRDs
+are present.
+
+Recommended local dev shape:
+
+- dedicated `kafka` namespace
+- one `KafkaNodePool`
+- one Kafka node with dual broker and controller roles
+- ephemeral storage
+- small resource requests and limits
+
+Keep the Kafka cluster in a separate Flux `Kustomization` with `dependsOn` set
+to the platform layer. This avoids applying `Kafka` resources before the Strimzi
+CRDs exist.
+
+Verification commands:
+
+```bash
+flux get kustomizations -A
+kubectl get kafkas,kafkanodepools -n kafka
+kubectl get pods -n kafka
+kubectl wait kafka/kafka-dev -n kafka --for=condition=Ready --timeout=10m
+```
