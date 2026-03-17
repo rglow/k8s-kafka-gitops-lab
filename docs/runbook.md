@@ -191,3 +191,33 @@ kubectl get kafkas,kafkanodepools -n platform-system
 kubectl get pods -n platform-system
 kubectl wait kafka/kafka-dev -n platform-system --for=condition=Ready --timeout=10m
 ```
+
+---
+
+## 6. Reconcile Kafka Topics and Users for Demo Apps
+
+The application layer can manage Kafka resources needed by sample workloads.
+The current `order-demo` slice creates:
+
+- `orders.incoming`
+- `orders.processed`
+- `orders.dlq`
+- Kafka users `order-api` and `order-processor`
+
+Flux reconciles this layer from `infra/apps/` after the Kafka cluster is ready.
+
+Verification commands:
+
+```bash
+flux get kustomizations -A
+kubectl get kafkatopics,kafkausers -n platform-system
+kubectl get secret order-api order-processor -n platform-system
+```
+
+Check topic details:
+
+```bash
+kubectl get kafkatopic orders-incoming -n platform-system -o yaml
+kubectl get kafkatopic orders-processed -n platform-system -o yaml
+kubectl get kafkatopic orders-dlq -n platform-system -o yaml
+```

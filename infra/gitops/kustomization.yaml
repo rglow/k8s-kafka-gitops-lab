@@ -4,3 +4,4 @@ resources:
   - flux-system
   - platform-kustomization.yaml
   - kafka-kustomization.yaml
+  - apps-kustomization.yaml

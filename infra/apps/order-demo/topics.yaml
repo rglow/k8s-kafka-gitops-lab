@@ -1,0 +1,44 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: orders-incoming
+  namespace: platform-system
+  labels:
+    strimzi.io/cluster: kafka-dev
+spec:
+  topicName: orders.incoming
+  partitions: 3
+  replicas: 1
+  config:
+    cleanup.policy: delete
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: orders-processed
+  namespace: platform-system
+  labels:
+    strimzi.io/cluster: kafka-dev
+spec:
+  topicName: orders.processed
+  partitions: 3
+  replicas: 1
+  config:
+    cleanup.policy: delete
+    retention.ms: 86400000
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: orders-dlq
+  namespace: platform-system
+  labels:
+    strimzi.io/cluster: kafka-dev
+spec:
+  topicName: orders.dlq
+  partitions: 3
+  replicas: 1
+  config:
+    cleanup.policy: delete
+    retention.ms: 604800000

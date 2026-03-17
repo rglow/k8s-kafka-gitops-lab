@@ -1,0 +1,61 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: order-api
+  namespace: platform-system
+  labels:
+    strimzi.io/cluster: kafka-dev
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: orders.incoming
+          patternType: literal
+        operations:
+          - Write
+          - Describe
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: order-processor
+  namespace: platform-system
+  labels:
+    strimzi.io/cluster: kafka-dev
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: orders.incoming
+          patternType: literal
+        operations:
+          - Read
+          - Describe
+      - resource:
+          type: topic
+          name: orders.processed
+          patternType: literal
+        operations:
+          - Write
+          - Describe
+      - resource:
+          type: topic
+          name: orders.dlq
+          patternType: literal
+        operations:
+          - Write
+          - Describe
+      - resource:
+          type: group
+          name: order-processor
+          patternType: prefix
+        operations:
+          - Read
