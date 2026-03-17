@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - topics.yaml
   - users.yaml
+  - order-api.yaml

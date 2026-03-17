@@ -221,3 +221,53 @@ kubectl get kafkatopic orders-incoming -n platform-system -o yaml
 kubectl get kafkatopic orders-processed -n platform-system -o yaml
 kubectl get kafkatopic orders-dlq -n platform-system -o yaml
 ```
+
+---
+
+## 7. Build and Deploy `order-api`
+
+`order-api` is a Spring Boot service in `services/order-api/`. It exposes `POST /orders`
+and publishes accepted requests to `orders.incoming`.
+
+Build the container image with Maven:
+
+```bash
+cd services/order-api
+mvn jib:dockerBuild
+```
+
+For the current local lab, the simplest path is to build to the local Docker daemon
+and import the image into k3d:
+
+```bash
+k3d image import order-api:0.1.0-SNAPSHOT -c platform-lab
+```
+
+Flux does not pull container images. Flux only reconciles Kubernetes manifests.
+The image must be available to the Kubernetes nodes, which in this setup means:
+
+1. build the image locally with Maven
+2. import it into the k3d cluster
+3. keep `imagePullPolicy: IfNotPresent`
+4. commit and push the manifest that references the same image tag
+
+If you later want reproducible remote pulls, move to a registry-backed flow such as:
+
+- local registry attached to k3d
+- `ghcr.io` with image pull secrets when needed
+
+Verification commands:
+
+```bash
+kubectl get deploy,po,svc -n platform-system -l app.kubernetes.io/name=order-api
+kubectl logs -n platform-system deploy/order-api
+kubectl port-forward -n platform-system svc/order-api 8080:80
+```
+
+Example request:
+
+```bash
+curl -i -X POST http://localhost:8080/orders \
+  -H 'Content-Type: application/json' \
+  -d '{"customerId":"customer-1","amount":42}'
+```
